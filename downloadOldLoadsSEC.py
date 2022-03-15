@@ -16,41 +16,6 @@ def today():
 
 Today = today()
 
-def createUserAgent(ip):
-    h = hashlib.blake2b(digest_size=5)
-    h.update(str(ip).encode())
-    return h.hexdigest()
-
-def createInputs():
-    with open("proxylist.txt",'r') as f:
-        proxyList = f.read().split("\n")
-        #print(proxyList)
- 
-    inputs = []
-    for i in range(len(proxyList)):
-        if(len(proxyList[i]) <= 0):
-            continue
-
-        split = proxyList[i].split(':')
-        proxyList[i] = {'ip':split[0], 'port':split[1], 'user':split[2], 'pass':split[3]}
-        proxyHash = str(createUserAgent(proxyList[i]['ip']))
-        
-        proxies = {
-            "http" : "http://"  + proxyList[i]['user'] + ':' + proxyList[i]['pass'] + '@' + proxyList[i]['ip'] + ":" + proxyList[i]['port'],
-            "https": "https://" + proxyList[i]['user'] + ':' + proxyList[i]['pass'] + '@' + proxyList[i]['ip'] + ":" + proxyList[i]['port']
-        }
-
-
-        headers = {
-            'User-Agent':proxyHash[0:5] + "@" + proxyHash[5:] + ".edu",
-            'Accept-Encoding':'gzip, deflate',
-            'Host':'www.sec.gov'
-        }
-
-        inputs.append({'headers':headers, 'proxies':proxies})
-
-    return inputs
-
 def main():
     #inputs = createInputs()
     headers = {
